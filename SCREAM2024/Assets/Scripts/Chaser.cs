@@ -7,10 +7,14 @@ public class Chaser : MonoBehaviour
 {
     public GameObject Creature;
 
-    private GameObject target;
+    public float speed;
+
+    public GameObject target;
+    private GameObject oldTarget;
     private ArrayList neighbors = new ArrayList();
 
-    // Random rnd = new Random();
+    //private Random rnd = new Random();
+    private System.Random rnd = new System.Random();
 
     // Start is called before the first frame update
     void Start()
@@ -18,35 +22,59 @@ public class Chaser : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    // Update is called once per framec
     void Update()
     {
         // when reach target, identify new target
-            // if distance to target <0.01, then find new
-        foreach(GameObject node in neighbors)
-        {
-            
-        }
+        // if distance to target <0.01, then find new
+        float distance = Vector3.Distance(gameObject.transform.position, target.transform.position);
 
-        // After select new target, remove old target from neighbors
-        neighbors.Remove(target);
+        // Smooth move to target
+        float step = speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, step);
+            // Add smooth rotation in direction
+
+        if (distance <= 0.1)
+        {
+            // After select new target, remove old target from neighbors
+            //neighbors.Remove(target);
+
+            int index;
+            // If only 1 option, take it, otherwise find new route from options
+            if (neighbors.Count == 2) // 2 includes original, meaning only 1 possible target
+            {
+                if (neighbors.IndexOf(target) == 0) index = 1;
+                else index = 0;
+            }
+            else {
+            do
+                { index = (rnd.Next(1, neighbors.Count +1)) - 1; } // Get random target that's doesn't ivolve staying still or going back
+                while (index == neighbors.IndexOf(target) || index == neighbors.IndexOf(oldTarget));
+            }
+                // Could add some logic for chance to pause, or turn around but make it less likely
+
+            oldTarget = target;
+            target = (GameObject)neighbors[index];
+        }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.CompareTag("Node"))
+        Debug.Log("Entered TR");
+        if (other.gameObject.CompareTag("Node"))
         {
             // add to list of possible targets
-            neighbors.Add(collision.gameObject);
+            neighbors.Add(other.gameObject);
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnTriggerExit(Collider other)
     {
-        if (collision.gameObject.CompareTag("Node") && neighbors.Contains(collision.gameObject))
+        Debug.Log("Exit TR");
+        if (other.gameObject.CompareTag("Node") && neighbors.Contains(other.gameObject))
         {
             // aremove from list
-            neighbors.Remove(collision.gameObject);
+            neighbors.Remove(other.gameObject);
         }
     }
 }
