@@ -13,49 +13,61 @@ public class Chaser : MonoBehaviour
     private GameObject oldTarget;
     private ArrayList neighbors = new ArrayList();
 
+    private bool isChasing = false;
+    private GameObject player;
+
     //private Random rnd = new Random();
     private System.Random rnd = new System.Random();
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindGameObjectsWithTag("Player")[0];
     }
 
     // Update is called once per framec
     void Update()
     {
-        // when reach target, identify new target
-        // if distance to target <0.01, then find new
-        float distance = Vector3.Distance(gameObject.transform.position, target.transform.position);
+        // If chasing player, implement alternative pathing
+        if (isChasing)
+        {
+            SmootheMove(player.transform); // Replace with pathing toward player, rather than random, choose node closest to player?
+        } else
+        {
+            SmootheMove(target.transform);
+            if (CalcDistance(Creature.transform, target.transform) <= 0.1)
+            {
+                int index;
+                // If only 1 option, take it, otherwise find new route from options
+                if (neighbors.Count == 2) // 2 includes original, meaning only 1 possible target
+                {
+                    if (neighbors.IndexOf(target) == 0) index = 1;
+                    else index = 0;
+                }
+                else {
+                do
+                    { index = (rnd.Next(1, neighbors.Count +1)) - 1; } // Get random target that doesn't involve staying still or going back
+                    while (index == neighbors.IndexOf(target) || index == neighbors.IndexOf(oldTarget));
+                }
+                    // Could add some logic for chance to pause, or turn around but make it less likely
 
+                oldTarget = target;
+                target = (GameObject)neighbors[index];
+            }
+        }
+    }
+
+    private void SmootheMove(Transform Target)
+    {
         // Smooth move to target
         float step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, target.transform.position, step);
-            // Add smooth rotation in direction
+        Creature.transform.position = Vector3.MoveTowards(Creature.transform.position, Target.position, step);
+        // Add smooth rotation in direction
+    }
 
-        if (distance <= 0.1)
-        {
-            // After select new target, remove old target from neighbors
-            //neighbors.Remove(target);
-
-            int index;
-            // If only 1 option, take it, otherwise find new route from options
-            if (neighbors.Count == 2) // 2 includes original, meaning only 1 possible target
-            {
-                if (neighbors.IndexOf(target) == 0) index = 1;
-                else index = 0;
-            }
-            else {
-            do
-                { index = (rnd.Next(1, neighbors.Count +1)) - 1; } // Get random target that's doesn't ivolve staying still or going back
-                while (index == neighbors.IndexOf(target) || index == neighbors.IndexOf(oldTarget));
-            }
-                // Could add some logic for chance to pause, or turn around but make it less likely
-
-            oldTarget = target;
-            target = (GameObject)neighbors[index];
-        }
+    private float CalcDistance(Transform a, Transform b)
+    {
+        return Vector3.Distance(a.position, b.position);
     }
 
     private void OnTriggerEnter(Collider other)
