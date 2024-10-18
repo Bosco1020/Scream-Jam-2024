@@ -21,6 +21,9 @@ namespace StarterAssets
         [Tooltip("Sprint speed of the character in m/s")]
         public float SprintSpeed = 5.335f;
 
+        [Tooltip("Rotation speed of the character")]
+        public float RotationSpeed = 1.0f;
+
         [Tooltip("How fast the character turns to face movement direction")]
         [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
@@ -192,7 +195,7 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
-            // if there is an input and camera position is not fixed
+            /* OLD // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
                 //Don't multiply mouse input by Time.deltaTime;
@@ -208,7 +211,26 @@ namespace StarterAssets
 
             // Cinemachine will follow this target
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
-                _cinemachineTargetYaw, 0.0f);
+                _cinemachineTargetYaw, 0.0f); */
+
+            // if there is an input
+            if (_input.look.sqrMagnitude >= _threshold)
+            {
+                //Don't multiply mouse input by Time.deltaTime
+                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+
+                _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
+                _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
+
+                // clamp our pitch rotation
+                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+
+                // Update Cinemachine camera target pitch
+                CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+
+                // rotate the player left and right
+                transform.Rotate(Vector3.up * _rotationVelocity);
+            }
         }
 
         private void Move()
@@ -250,6 +272,7 @@ namespace StarterAssets
 
             // normalise input direction
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+                // input.move.y = -1 means backwards, y=1 forward, x=-1 left, x=1 right
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
@@ -261,7 +284,18 @@ namespace StarterAssets
                     RotationSmoothTime);
 
                 // rotate to face input direction relative to camera position
+                if(_input.move.y != -1) { // Only rotates camera if going forward
+                    // can maybe remove entirely?
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+                }
+
+                    // Rotate camera same as player!
+                // Over Corrects with camera move above, gameplay also contradicts, with A & D becoming same as mouse turn
+                    // Better to remove A & D controls?
+                /*
+                _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+                CinemachineCameraTarget.transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+                */
             }
 
 
@@ -274,6 +308,10 @@ namespace StarterAssets
             // update animator if using character
             if (_hasAnimator)
             {
+                if(_input.move.y == -1)
+                {
+                    inputMagnitude *= -1;
+                }
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
             }
