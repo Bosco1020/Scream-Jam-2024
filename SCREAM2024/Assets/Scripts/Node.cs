@@ -47,7 +47,7 @@ public class Node : MonoBehaviour
         if (lightTrigger)
         {
             //_animator.SetFloat(_animIDSpeed, norm_distance);
-            if (norm_distance <= 0.01) _light.intensity = 0;
+            if (norm_distance <= 0.001) _light.intensity = 0;
             else { _light.intensity = norm_distance * mod; }
         }
         else
@@ -63,7 +63,8 @@ public class Node : MonoBehaviour
 
     private void generateModifier()
     {
-        mod = ((rnd.Next(1, 12)) + 14) / 20;
+        mod = (rnd.Next(1, 12)) + 14;
+        mod /= 20;
         // between 0.75 & 1.25
     }
 

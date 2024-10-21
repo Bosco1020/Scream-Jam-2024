@@ -28,8 +28,6 @@ public class Chaser : MonoBehaviour
     // Update is called once per framec
     void Update()
     {
-        messageLights();
-
         // If chasing player, implement alternative pathing
         if (isChasing)
         {
@@ -37,7 +35,7 @@ public class Chaser : MonoBehaviour
         } else
         {
             SmootheMove(target.transform);
-            if (CalcDistance(Creature.transform, target.transform) <= 0.1)
+            if (CalcDistance(Creature.transform, target.transform) <= 0.01)
             {
                 int index;
                 // If only 1 option, take it, otherwise find new route from options
@@ -51,19 +49,12 @@ public class Chaser : MonoBehaviour
                     { index = (rnd.Next(1, neighbors.Count +1)) - 1; } // Get random target that doesn't involve staying still or going back
                     while (index == neighbors.IndexOf(target) || index == neighbors.IndexOf(oldTarget));
                 }
+                //Debug.Log(index);
                     // Could add some logic for chance to pause, or turn around but make it less likely
 
                 oldTarget = target;
                 target = (GameObject)neighbors[index];
             }
-        }
-    }
-
-    void messageLights()
-    {
-        foreach(GameObject node in neighbors)
-        {
-            node.SendMessage("startFlicker", CalcDistance(Creature.transform, node.transform));
         }
     }
 
@@ -82,21 +73,21 @@ public class Chaser : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Entered TR");
         if (other.gameObject.CompareTag("Node"))
         {
             // add to list of possible targets
             neighbors.Add(other.gameObject);
+            //Debug.Log(other.gameObject);
+            //Debug.Log("N = " + neighbors.Count);
         }
+
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Exit TR");
         if (other.gameObject.CompareTag("Node") && neighbors.Contains(other.gameObject))
         {
             // aremove from list
-            other.gameObject.SendMessage("endFlicker");
             neighbors.Remove(other.gameObject);
         }
     }

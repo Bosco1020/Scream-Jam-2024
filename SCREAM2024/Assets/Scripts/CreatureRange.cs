@@ -6,10 +6,7 @@ public class CreatureRange : MonoBehaviour
 {
     public GameObject Creature;
 
-    private ArrayList neighbors = new ArrayList();
-
-    //private Random rnd = new Random();
-    private System.Random rnd = new System.Random();
+    private ArrayList allLights = new ArrayList();
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +21,7 @@ public class CreatureRange : MonoBehaviour
 
     void messageLights()
     {
-        foreach (GameObject node in neighbors)
+        foreach (GameObject node in allLights)
         {
             node.SendMessage("startFlicker", CalcDistance(Creature.transform, node.transform));
         }
@@ -39,16 +36,16 @@ public class CreatureRange : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Node"))
         {
-            neighbors.Add(other.gameObject);
+            allLights.Add(other.gameObject);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Node") && neighbors.Contains(other.gameObject))
+        if (other.gameObject.CompareTag("Node") && allLights.Contains(other.gameObject))
         {
             other.gameObject.SendMessage("endFlicker");
-            neighbors.Remove(other.gameObject);
+            allLights.Remove(other.gameObject);
         }
     }
 }
