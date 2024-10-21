@@ -180,6 +180,7 @@ namespace StarterAssets
 
         private void LateUpdate()
         {
+            if (isPaused) { return; }
             CameraRotation();
         }
 
