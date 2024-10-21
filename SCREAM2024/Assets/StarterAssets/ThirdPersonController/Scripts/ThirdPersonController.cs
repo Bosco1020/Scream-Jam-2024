@@ -113,6 +113,8 @@ namespace StarterAssets
 
         private bool _hasAnimator;
 
+        private bool isPaused = false;
+
         private bool IsCurrentDeviceMouse
         {
             get
@@ -123,6 +125,16 @@ namespace StarterAssets
 				return false;
 #endif
             }
+        }
+
+        public void Pause()
+        {
+            isPaused = true;
+        }
+
+        public void unPause()
+        {
+            isPaused = false;
         }
 
 
@@ -157,6 +169,8 @@ namespace StarterAssets
 
         private void Update()
         {
+            if(isPaused) { return; }
+
             _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
