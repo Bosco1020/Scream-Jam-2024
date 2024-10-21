@@ -28,18 +28,28 @@ public class PauseMenu : MonoBehaviour
         }
     }
 
-void ActivateMenu()
+    void ActivateMenu()
     {
         Time.timeScale = 0;
         AudioListener.pause = true;
         PauseMenuUI.SetActive(true);
     }
 
-public void DeactivateMenu()
+    public void DeactivateMenu()
     {
         Time.timeScale = 1;
         AudioListener.pause = false;
         PauseMenuUI.SetActive(false);
         isPaused = false;
     }
+
+
+    public void EndGame()
+    {   
+        Application.Quit();
+    }
 }
+
+
+
+
