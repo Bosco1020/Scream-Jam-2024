@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 939571852806846610}
   - component: {fileID: 990170578251281489}
   - component: {fileID: 4386113311932423908}
+  - component: {fileID: 7779491811814041015}
   m_Layer: 0
   m_Name: Light (1)
   m_TagString: Untagged
@@ -106,6 +107,27 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &7779491811814041015
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288120698334578928}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 111f9a4f2c5a88e40854ff8e7313be07, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7405194842797228474
 GameObject:
   m_ObjectHideFlags: 0

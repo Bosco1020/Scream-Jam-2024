@@ -28,6 +28,8 @@ public class Chaser : MonoBehaviour
     // Update is called once per framec
     void Update()
     {
+        messageLights();
+
         // If chasing player, implement alternative pathing
         if (isChasing)
         {
@@ -54,6 +56,14 @@ public class Chaser : MonoBehaviour
                 oldTarget = target;
                 target = (GameObject)neighbors[index];
             }
+        }
+    }
+
+    void messageLights()
+    {
+        foreach(GameObject node in neighbors)
+        {
+            node.SendMessage("startFlicker", CalcDistance(Creature.transform, node.transform));
         }
     }
 
@@ -86,6 +96,7 @@ public class Chaser : MonoBehaviour
         if (other.gameObject.CompareTag("Node") && neighbors.Contains(other.gameObject))
         {
             // aremove from list
+            other.gameObject.SendMessage("endFlicker");
             neighbors.Remove(other.gameObject);
         }
     }
