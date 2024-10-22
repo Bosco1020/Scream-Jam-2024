@@ -1,51 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CreatureRange : MonoBehaviour
 {
-    public GameObject Creature;
-
-    private ArrayList allLights = new ArrayList();
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per framec
-    void Update()
-    {
-        messageLights();
-    }
-
-    void messageLights()
-    {
-        foreach (GameObject node in allLights)
-        {
-            node.SendMessage("startFlicker", CalcDistance(Creature.transform, node.transform));
-        }
-    }
-
-    private float CalcDistance(Transform a, Transform b)
-    {
-        return Vector3.Distance(a.position, b.position);
-    }
+    public UnityEvent beginChase = new UnityEvent();
+    public UnityEvent endChase = new UnityEvent();
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Node"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            allLights.Add(other.gameObject);
+            beginChase.Invoke();
+            Debug.Log("RUN");
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Node") && allLights.Contains(other.gameObject))
+        if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.SendMessage("endFlicker");
-            allLights.Remove(other.gameObject);
+            endChase.Invoke();
         }
     }
 }
