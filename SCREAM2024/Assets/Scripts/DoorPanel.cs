@@ -14,7 +14,6 @@ public class DoorPanel : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             enter.Invoke();
-            Debug.Log("Yay");
         }
     }
 
@@ -23,7 +22,6 @@ public class DoorPanel : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             exit.Invoke();
-            Debug.Log("Yoo");
         }
     }
 }

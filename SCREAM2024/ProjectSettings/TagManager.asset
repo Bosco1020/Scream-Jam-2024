@@ -7,6 +7,8 @@ TagManager:
   - CinemachineTarget
   - Node
   - Monster
+  - SF_Door
+  - PlayerTarget
   layers:
   - Default
   - TransparentFX
