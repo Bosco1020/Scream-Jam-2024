@@ -64,6 +64,8 @@ public class Chaser : MonoBehaviour
             //Debug.Log(index);
             // Could add some logic for chance to pause, or turn around but make it less likely
 
+            Creature.transform.LookAt(target.transform);
+
             oldTarget = target;
             target = (GameObject)neighbors[index];
         }
@@ -87,6 +89,8 @@ public class Chaser : MonoBehaviour
                 }
             }
 
+            Creature.transform.LookAt(target.transform);
+
             oldTarget = target;
             target = (GameObject)neighbors[index];
         }
@@ -100,7 +104,13 @@ public class Chaser : MonoBehaviour
         else step = speed * Time.deltaTime;
 
         Creature.transform.position = Vector3.MoveTowards(Creature.transform.position, Target.position, step);
+
         // Add smooth rotation in direction
+        Vector3 relativePos = Target.position - Creature.transform.position;
+
+        // the second argument, upwards, defaults to Vector3.up
+        Quaternion rotation = Quaternion.Slerp(Creature.transform.rotation, Quaternion.LookRotation(relativePos, Vector3.up), step);
+        Creature.transform.rotation = rotation;
     }
 
     private float CalcDistance(Transform a, Transform b)

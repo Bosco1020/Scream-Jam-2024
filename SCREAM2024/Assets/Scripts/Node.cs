@@ -6,7 +6,7 @@ public class Node : MonoBehaviour
 {
     private System.Random rnd = new System.Random();
 
-    [SerializeField] private GameObject light;
+    [SerializeField] private GameObject lightObj;
     //private Animator _animator;
     [SerializeField] private Light _light;
 
@@ -17,36 +17,20 @@ public class Node : MonoBehaviour
 
     [SerializeField] private float lightTriggerRange = 20.0f;
 
-    // animation IDs
-    //private int _animIDSpeed;
-    //private int _animIDActive;
-
     private float norm_distance;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        //_hasAnimator = TryGetComponent(out _animator);
-        //_animator = GetComponentInChildren<Animator>();
-        //_light = light.GetComponentInChildren<Light>();
-        //AssignAnimationIDs();
+        lightObj.SetActive(false);
     }
-    /*private void AssignAnimationIDs()
-    {
-        _animIDSpeed = Animator.StringToHash("Speed");
-        _animIDActive = Animator.StringToHash("Active");
-    }*/
 
     // Update is called once per frame
     void Update()
     {
-        //if(!_hasAnimator) { return; }
-        //_animator.SetBool(_animIDActive, lightTrigger);
-
         if (lightTrigger)
         {
-            //_animator.SetFloat(_animIDSpeed, norm_distance);
             if (norm_distance <= 0.001) _light.intensity = 0;
             else { _light.intensity = norm_distance * mod; }
         }
@@ -78,6 +62,21 @@ public class Node : MonoBehaviour
         if (norm_distance < 0) norm_distance = 0;
         //Debug.Log(distance+ ":" + norm_distance);
     }
+
+    public void disableLight()
+    {
+        lightObj.SetActive(false);
+    }
+
+    public void enableLight()
+    {
+        lightObj.SetActive(true);
+    }
+
+    /*void OnBecameVisible()
+    {
+        lightObj.SetActive(true);
+    }*/
 
     public void endFlicker()
     {

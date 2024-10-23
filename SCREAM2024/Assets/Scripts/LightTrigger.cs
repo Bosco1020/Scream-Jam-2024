@@ -6,6 +6,8 @@ public class LightTrigger : MonoBehaviour
 {
     public GameObject Creature;
 
+    [SerializeField] private bool isPlayer;
+
     private ArrayList allLights = new ArrayList();
 
     // Start is called before the first frame update
@@ -16,7 +18,7 @@ public class LightTrigger : MonoBehaviour
     // Update is called once per framec
     void Update()
     {
-        messageLights();
+        if(!isPlayer) messageLights();
     }
 
     void messageLights()
@@ -34,19 +36,32 @@ public class LightTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Trigger");
         if (other.gameObject.CompareTag("Node"))
         {
-            allLights.Add(other.gameObject);
+            if (isPlayer) {
+                other.gameObject.SendMessage("enableLight");
+            }
+            else
+            {
+                allLights.Add(other.gameObject);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Node") && allLights.Contains(other.gameObject))
+        if (other.gameObject.CompareTag("Node"))
         {
-            other.gameObject.SendMessage("endFlicker");
-            allLights.Remove(other.gameObject);
+            if (isPlayer) {
+                other.gameObject.SendMessage("disableLight");
+            }
+            else {
+                if(allLights.Contains(other.gameObject))
+                {
+                    other.gameObject.SendMessage("endFlicker");
+                    allLights.Remove(other.gameObject);
+                }
+            }
         }
     }
 }

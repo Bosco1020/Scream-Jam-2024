@@ -46,9 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b58460e2010803409adf684632862a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  light: {fileID: 2548006388826337453}
+  lightObj: {fileID: 6086770775352621543}
   _light: {fileID: 4959241020340496573}
-  lightTriggerRange: 20
+  lightTriggerRange: 25
 --- !u!135 &3513541121754820164
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -131,11 +131,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9407d8e7746794b45b228d5596f3c582, type: 3}
---- !u!1 &2548006388826337453 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1288120698334578928, guid: 9407d8e7746794b45b228d5596f3c582, type: 3}
-  m_PrefabInstance: {fileID: 3655802206363646045}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3587090569816111840 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 251044218329236157, guid: 9407d8e7746794b45b228d5596f3c582, type: 3}
@@ -144,5 +139,10 @@ Transform:
 --- !u!108 &4959241020340496573 stripped
 Light:
   m_CorrespondingSourceObject: {fileID: 8533978048864981216, guid: 9407d8e7746794b45b228d5596f3c582, type: 3}
+  m_PrefabInstance: {fileID: 3655802206363646045}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6086770775352621543 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7405194842797228474, guid: 9407d8e7746794b45b228d5596f3c582, type: 3}
   m_PrefabInstance: {fileID: 3655802206363646045}
   m_PrefabAsset: {fileID: 0}
