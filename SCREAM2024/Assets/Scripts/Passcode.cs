@@ -16,4 +16,9 @@ public class Passcode : ScriptableObject
     {
         Code = "";
     }
+
+    public string getCode()
+    {
+        return Code;
+    }
 }
