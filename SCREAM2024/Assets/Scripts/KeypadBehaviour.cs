@@ -35,29 +35,13 @@ public class KeypadBehaviour : MonoBehaviour
         interactPrompt.gameObject.SetActive(false);
         //generatedPasscode.clearCode();
         //generatedPasscode.appendCode(1234);
-        generatedCode = generatedPasscode.getCode();
-        UnityEngine.Debug.Log("Generated Code: " + generatedCode);
+        StartCoroutine(GenerateCoroutine());
         ResetDisplay();
     }
 
     void Update()
     {
-        float distance = Vector3.Distance(player.transform.position, transform.position);
-        if (distance <= interactionDistance)
-        {
-            isNearKeypad = true;
-            interactPrompt.gameObject.SetActive(true);
-        }
-        else
-        {
-            isNearKeypad = false;
-            interactPrompt.gameObject.SetActive(false);
-            if (keypadOpen)
-            {
-                DeactivateKeypad();
-            }
-        }
-
+        
         if (isNearKeypad && Input.GetKeyDown(KeyCode.E))
         {
             if (keypadOpen)
@@ -92,6 +76,33 @@ public class KeypadBehaviour : MonoBehaviour
         correctCode.Invoke();
         yield return new WaitForSeconds(2);
         DeactivateKeypad();
+    }
+
+    IEnumerator GenerateCoroutine()
+    {
+        yield return new WaitForSeconds(1);
+        generatedCode = generatedPasscode.getCode();
+        Debug.Log("Generated Code: " + generatedCode);
+
+    }
+
+
+
+    public void EntersRange()
+    {
+        isNearKeypad = true;
+        interactPrompt.gameObject.SetActive(true);
+
+    }
+
+    public void ExitsRange()
+    {
+        isNearKeypad = false;
+        interactPrompt.gameObject.SetActive(false);
+        if (keypadOpen)
+        {
+            DeactivateKeypad();
+        }
     }
 
     void HandleKeypadInput()
