@@ -6,10 +6,14 @@ public class Spawner : MonoBehaviour
 {
     public GameObject[] objects;
 
+    public GameObject[] objIndex;
+
     public Transform spawn;
 
-    public void spawnObject(int index)
+    public void spawnObject(int digit, int index)
     {
-        Instantiate(objects[index], spawn);
+        Instantiate(objects[digit], spawn);
+
+        Instantiate(objIndex[index], transform);
     }
 }
