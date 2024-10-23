@@ -11,29 +11,52 @@ public class PauseMenu : MonoBehaviour
 
     [SerializeField] private bool isPaused;
 
+    [SerializeField] private bool isOver;
+
     [SerializeField] private UnityEvent pause = new UnityEvent();
 
     [SerializeField] private UnityEvent unpause = new UnityEvent();
 
 
     private void Update()
+
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            isPaused = !isPaused;
-        }
 
         if (isPaused)
         {
-            ActivateMenu();
-            Cursor.lockState = CursorLockMode.None;
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                isPaused = !isPaused;
+                DeactivateMenu();
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                ActivateMenu();
+                Cursor.lockState = CursorLockMode.None;
+            }
         }
-
         else
         {
-            DeactivateMenu();
-            Cursor.lockState = CursorLockMode.Locked;
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                isPaused = !isPaused;
+                ActivateMenu();
+                Cursor.lockState = CursorLockMode.None;
+            }
+            else
+            {
+                if (isOver) return;
+                DeactivateMenu();
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
+
+    }
+
+    public void setIsOver(bool Over)
+    {
+        isOver = Over;
     }
 
     void ActivateMenu()
@@ -42,8 +65,6 @@ public class PauseMenu : MonoBehaviour
         AudioListener.pause = true;
         pause.Invoke();
         PauseMenuUI.SetActive(true);
-        
-
     }
 
     public void DeactivateMenu()
